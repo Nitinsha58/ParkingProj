@@ -11,7 +11,7 @@ export default async ({ req, res, log, error }) => {
 
     if (req.path == "/parking" && req.method == "POST"){
         const cardid = req.query.cardid;
-        return res.send("Card id is : " + cardid);
+        // return res.send("Card id is : " + cardid);
         if (!cardid) {
             return res.json({ok: false, message: 'Invalid card'}, 400);
         }
@@ -22,6 +22,8 @@ export default async ({ req, res, log, error }) => {
         );
         return res.json(response);
     } 
+
+    return res.send("Invalid request method");
 }
 
 
