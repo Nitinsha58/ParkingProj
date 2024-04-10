@@ -10,7 +10,7 @@ export default async ({ req, res, log, error }) => {
     const databases = new Databases(client);
 
     if (req.path == "/parking" && req.method == "POST"){
-        const cardid = req.body.cardid;
+        const cardid = req.query.cardid;
         return res.send("Card id is : " + cardid);
         if (!cardid) {
             return res.json({ok: false, message: 'Invalid card'}, 400);
