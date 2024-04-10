@@ -9,14 +9,18 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
+    if (req.path == "/parking" && req.method == "POST"){
+        const cardid = req.body.cardid;
+        if (!cardid) {
+            return res.json({ok: false, message: 'Invalid card'}, 400);
+        }
         const response = await databases.listDocuments(
             process.env.APPWRITE_DATABASE_ID,
             process.env.USERS_COLLECTION,
-            [Query.equal('username', 'nitinsha58')],
+            [Query.equal('cardId', cardid)],
         );
-
-        console.log(response); // Success
         return res.json(response);
+    } 
 }
 
 
