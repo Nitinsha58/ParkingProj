@@ -39,21 +39,46 @@ export default async ({ req, res, log, error }) => {
                 return res.json({ok: false, message: 'No spots available'}, 400);
             }
 
-            const spot = spots.documents[0].$id;
+            if (document.balance < 30) {
+                return res.json({ok: false, message: 'Insufficient balance'}, 400);
+            }
+
+            const spot = spots.documents[0];
 
             await databases.updateDocument(
                 process.env.APPWRITE_DATABASE_ID,
                 process.env.USERS_COLLECTION,
                 document.$id,
                 {
-                    parkingSpot: spot
+                    parkingSpot: spot.$id
                 }
             );
             return res.json({ok: true, message: 'Parked successfully', spot: spot});
+        }else {
+            // 2. already parked
+            const spot = document.parkingSpot;
+            await databases.updateDocument(
+                process.env.APPWRITE_DATABASE_ID,
+                process.env.USERS_COLLECTION,
+                document.$id,
+                {
+                    parkingSpot: null,
+                    balance: document.balance - 30
+                }
+            );
+            await databases.updateDocument(
+                process.env.APPWRITE_DATABASE_ID,
+                process.env.PARKINGSPOT_COLLECTION,
+                spot,
+                {
+                    occupied: false
+                }
+            );
+            return res.json({ok: true, message: 'Unparked successfully', spot: spot});
         }
 
 
-        // 2. parked before
+
 
         // if (document && document.balance > 30 && document.parkingSpot) {
 
