@@ -10,6 +10,7 @@ export default async ({ req, res, log, error }) => {
     const databases = new Databases(client);
 
         const response = await databases.listDocuments(
+            process.env.APPWRITE_DATABASE_ID,
             process.env.USERS_COLLECTION,
         );
 
