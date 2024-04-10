@@ -11,6 +11,7 @@ export default async ({ req, res, log, error }) => {
 
     if (req.path == "/parking" && req.method == "POST"){
         const cardid = req.body.cardid;
+        return res.send("Card id is : " + cardid);
         if (!cardid) {
             return res.json({ok: false, message: 'Invalid card'}, 400);
         }
