@@ -55,7 +55,6 @@ export default async ({ req, res, log, error }) => {
             );
             return res.json({ok: true, message: 'Parked successfully', spotNumber: spot.$spotNumber, id: spot.$id});
         }else {
-            // 2. already parked
             const spot = document.parkingSpot;
             await databases.updateDocument(
                 process.env.APPWRITE_DATABASE_ID,
