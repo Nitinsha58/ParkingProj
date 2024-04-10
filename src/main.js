@@ -26,7 +26,6 @@ export default async ({ req, res, log, error }) => {
             response.documents[0].$id
         );
 
-        // 1. first time parking
         if (document.parkingSpot == null) {
 
             const spots = await databases.listDocuments(
@@ -76,6 +75,22 @@ export default async ({ req, res, log, error }) => {
             return res.json({ok: true, message: 'Unparked successfully', username: document.username, balance: document.balance - 30});
         }
     } 
+
+    if (req.path == "/users" && req.method == "GET"){
+        const users = await databases.listDocuments(
+            process.env.APPWRITE_DATABASE_ID,
+            process.env.USERS_COLLECTION,
+        );
+        return res.json(users.documents);
+    }
+
+    if (req.path == "/spots" && req.method == "GET"){
+        const spots = await databases.listDocuments(
+            process.env.APPWRITE_DATABASE_ID,
+            process.env.PARKINGSPOT_COLLECTION,
+        );
+        return res.json(spots.documents);
+    }
 
     return res.send("Invalid request method");
 }
