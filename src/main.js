@@ -11,7 +11,6 @@ export default async ({ req, res, log, error }) => {
 
     if (req.path == "/parking" && req.method == "POST"){
         const cardid = req.query.cardid;
-        // return res.send("Card id is : " + cardid);
         if (!cardid) {
             return res.json({ok: false, message: 'Invalid card'}, 400);
         }
@@ -20,8 +19,82 @@ export default async ({ req, res, log, error }) => {
             process.env.USERS_COLLECTION,
             [Query.equal('cardId', cardid)],
         );
-        return res.json(response);
+
+        const document = await databases.getDocument(
+            process.env.APPWRITE_DATABASE_ID,
+            process.env.USERS_COLLECTION,
+            response.documents[0].$id
+        );
+
+        // 1. first time parking
+        if (document.parkingSpot == null) {
+
+            const spots = await databases.listDocuments(
+                process.env.APPWRITE_DATABASE_ID,
+                process.env.USERS_COLLECTION,
+                [Query.equal('occupied', ['false', 'null'])],
+            );
+
+            if (spots.documents.length == 0) {
+                return res.json({ok: false, message: 'No spots available'}, 400);
+            }
+
+            const spot = spots.documents[0].$id;
+
+            await databases.updateDocument(
+                process.env.APPWRITE_DATABASE_ID,
+                process.env.USERS_COLLECTION,
+                document.$id,
+                {
+                    parkingSpot: spot
+                }
+            );
+            return res.json({ok: true, message: 'Parked successfully', spot: spot});
+        }
+
+
+        // 2. parked before
+
+        // if (document && document.balance > 30 && document.parkingSpot) {
+
+        //     const previousTime = new Date(document.time.$date);
+
+        //     const timeDifferenceMs = currentTime.getTime() - previousTime.getTime();
+
+        //     const timeDifferenceMinutes = Math.ceil(timeDifferenceMs / (1000 * 60));
+
+        //     // Calculate total charge
+        //     const charge = timeDifferenceMinutes * 30; // 30Rs per minute
+
+        //     console.log('Time difference:', timeDifferenceMinutes, 'minutes');
+        //     console.log('Total charge:', charge, 'USD');
+
+        //     // Update user document with current time
+        //     await database.updateDocument(
+        //         'YOUR_COLLECTION_ID', // Replace with your collection ID
+        //         'USER_DOCUMENT_ID', // Replace with the ID of the user document
+        //         {
+        //             time: { '$date': currentTime.toISOString() }, // Store current time as ISO string
+        //             balance: document.balance - charge // Update balance by deducting the charge
+        //         }
+        //     );
+        // } else {
+        //     // Store current time for the first iteration
+        //     await database.createDocument(
+        //         'YOUR_COLLECTION_ID', // Replace with your collection ID
+        //         {
+        //             time: { '$date': currentTime.toISOString() }, // Store current time as ISO string
+        //             balance: 0 // Set initial balance
+        //         }
+        //     );
+
+        //     console.log('Stored current time as previous time');
+        // }
+
+        // return res.json(response);
     } 
+
+
 
     return res.send("Invalid request method");
 }
