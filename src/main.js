@@ -31,7 +31,7 @@ export default async ({ req, res, log, error }) => {
 
             const spots = await databases.listDocuments(
                 process.env.APPWRITE_DATABASE_ID,
-                process.env.USERS_COLLECTION,
+                process.env.PARKINGSPOT_COLLECTION,
                 [Query.equal('occupied', ['false', 'null'])],
             );
 
