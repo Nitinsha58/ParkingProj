@@ -9,17 +9,12 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
-    try {
         const response = await databases.listDocuments(
             process.env.USERS_COLLECTION,
         );
 
         console.log(response); // Success
         return res.json(response);
-    } catch (error) {
-        console.log(error); // Failure
-        return res.send("Query Failed.");
-    }
 }
 
 
