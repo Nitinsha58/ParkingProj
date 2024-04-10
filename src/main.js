@@ -1,4 +1,4 @@
-import { Client, Databases, ID } from 'node-appwrite';
+import { Client, Databases } from 'node-appwrite';
 
 export default async ({ req, res, log, error }) => {
 
@@ -9,20 +9,17 @@ export default async ({ req, res, log, error }) => {
 
     const databases = new Databases(client);
 
-    const promise = databases.listDocuments(
-        process.env.APPWRITE_DATABASE_ID,
-        process.env.USERS_COLLECTION,
-    );
+    try {
+        const response = await databases.listDocuments(
+            process.env.USERS_COLLECTION,
+        );
 
-    promise.then(function (response) {
         console.log(response); // Success
         return res.json(response);
-    }, function (error) {
+    } catch (error) {
         console.log(error); // Failure
-        return res.send("Query Failed.")
-    });
-
-    return res.send("Hello World")
+        return res.send("Query Failed.");
+    }
 }
 
 
