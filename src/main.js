@@ -1,4 +1,4 @@
-import { Client } from 'node-appwrite';
+import { Client, Appwrite } from 'node-appwrite';
 
 export default async function main(context) {
     const client = new Appwrite();
