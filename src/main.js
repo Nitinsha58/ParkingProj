@@ -53,7 +53,7 @@ export default async ({ req, res, log, error }) => {
                     parkingSpot: spot.$id
                 }
             );
-            return res.json({ok: true, message: 'Parked successfully', spotNumber: spot.$spotNumber, id: spot.$id});
+            return res.json({ok: true, message: 'Parked successfully', spotNumber: spot.$spotNumber, id: spot.$id, spot: spot});
         }else {
             const spot = document.parkingSpot;
             await databases.updateDocument(
