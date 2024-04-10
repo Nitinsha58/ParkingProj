@@ -1,6 +1,6 @@
-const { Appwrite } = require('node-appwrite');
+import { Client } from 'node-appwrite';
 
-async function main(context) {
+export default async function main(context) {
     const client = new Appwrite();
     client
         .setEndpoint(process.env.APPWRITE_ENDPOINT)
@@ -58,5 +58,3 @@ async function main(context) {
 
     return context.res.send("Invalid request method");
 }
-
-module.exports = main;
