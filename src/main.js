@@ -1,4 +1,4 @@
-import { Client, Databases } from 'node-appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 export default async ({ req, res, log, error }) => {
 
@@ -12,6 +12,7 @@ export default async ({ req, res, log, error }) => {
         const response = await databases.listDocuments(
             process.env.APPWRITE_DATABASE_ID,
             process.env.USERS_COLLECTION,
+            [Query.equal('username', 'nitinsha58')],
         );
 
         console.log(response); // Success
