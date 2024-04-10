@@ -69,7 +69,7 @@ export default async ({ req, res, log, error }) => {
             await databases.updateDocument(
                 process.env.APPWRITE_DATABASE_ID,
                 process.env.PARKINGSPOT_COLLECTION,
-                spot,
+                spot.$id,
                 {
                     occupied: false
                 }
