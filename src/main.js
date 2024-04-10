@@ -28,8 +28,6 @@ export default async ({ req, res, log, error }) => {
 
 
 
-
-
 // import { Client, Appwrite } from 'node-appwrite';
 
 // async function main(context) {
